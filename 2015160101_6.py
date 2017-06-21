@@ -146,7 +146,9 @@ class RedBlackTree:
             self.print(tree.right,level + 1)
         for i in range(level):
             print('   ', end='')
-        print(tree.val,tree.color)
+        print(tree.val)
+        #print(tree.val,tree.color)
+        #print(tree.color)
         if tree.left != self.nil:
             self.print(tree.left, level + 1)
 
@@ -286,13 +288,15 @@ class RedBlackTree:
                 return self.predecessor(x.left),x.left,self.successor(x.left)
             else:
                 return self.searchThree(x.left,k)
-        else:
+        elif k > x.val:
             if x.right == self.nil:
                 return x,self.nil,self.successor(x)
             elif x.right.val == k:
                 return self.predecessor(x.right),x.right,self.successor(x.right)
             else:
                 return self.searchThree(x.right,k)
+        else:
+            return self.predecessor(x),x,self.successor(x)
 
     def Input(self,val):
         if val > 0:#insert
@@ -364,37 +368,34 @@ class RedBlackTree:
                 else:
                     bnode = bnode.left
 
-
-road = './input/'
 kiminonamaewa = []
 
 def search():
+    road = './input/'
     doWeSearch = "False"
     searchLocation = "./search.txt"
     #input 파일이 있을 때는 글로 들어가서 찾을 것. 
-    if os.path.isdir('./input'):
+    if os.path.isdir(road):
         filenames = os.listdir(road)
     else:
-        filenames = os.listdir('./')
-        
-    #input폴더 안에 search가 있을 경우.    
-    if os.path.exists(searchLocation):    
-        doWeSearch = "True"
-    elif os.path.exists('./input/search.txt'):
-        searchLocation = './input/search.txt'
-        doWeSearch = "True"    
+        filenames = os.listdir('./')           
+        road = './'
     
     for filename in filenames:
-        if filename[-4:]==".txt" and filename != "search.txt" and filename[:6] != "output":
+        if filename[-4:]==".txt" and filename[:6] != "search" and filename[:6] != "output":
             kiminonamaewa.append(filename)
+        if filename[-4:]==".txt" and filename[:6] == "search":    
+            doWeSearch = "True"
+            searchLocation = road+filename    
+            print("use"+road+filename+" to search")        
+    
     return kiminonamaewa,doWeSearch,searchLocation
 
 def main():
     abcloop = 0
     
     kiminonamaewa,doWeSearch,searchLocation = search()
-    
-    print(doWeSearch,searchLocation)
+    #print(doWeSearch,searchLocation)
     for abc in kiminonamaewa:
         if abc == kiminonamaewa[0]:
             if abcloop == 1:
@@ -427,6 +428,8 @@ def main():
         rbt.blackheight(rbt.root)#bh =
         rbt.printInorder(rbt.root)#inorder traversal
 
+        #rbt.print(rbt.root,0)
+        
         if doWeSearch == "True":#search 파일이 있으면 찾아라
             
             ff = open(searchLocation, 'r')
@@ -441,11 +444,11 @@ def main():
                 if number != 0:
                     l = rbt.searchThree(rbt.root,number)
                     outes = ['NIL']*3
-
+                    
                     for i in range(3):
-                        if l[i] != None:
+                        if l[i] != rbt.nil:
                             outes[i] = str(l[i].val)
-
+                    
                     datas = outes[0]+" "+outes[1]+" "+outes[2]
                     #using lambda function
                     #datas = reduce(lambda x, y: x+" "+y,outes)
@@ -455,7 +458,7 @@ def main():
                     break
             ff.close()
             outputf.close()
-            print(" ")
+            #print(" ")
             
 if __name__ == '__main__':
     main()
