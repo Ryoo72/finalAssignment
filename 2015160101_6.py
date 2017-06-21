@@ -389,12 +389,12 @@ def search():
             searchLocation = road+filename    
             print("use"+road+filename+" to search")        
     
-    return kiminonamaewa,doWeSearch,searchLocation
+    return kiminonamaewa,doWeSearch,searchLocation,road
 
 def main():
     abcloop = 0
     
-    kiminonamaewa,doWeSearch,searchLocation = search()
+    kiminonamaewa,doWeSearch,searchLocation,road = search()
     #print(doWeSearch,searchLocation)
     for abc in kiminonamaewa:
         if abc == kiminonamaewa[0]:
